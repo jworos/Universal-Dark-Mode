@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Dark Mode for Social Media</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+    }
+    .toggle-bg {
+      transition: background-color 0.3s ease;
+    }
+    .dot {
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300">
+  <div class="flex items-center mb-4">
+    <img src="images/icon48.png" alt="Logo" class="w-8 h-8 mr-2">
+    <h1 class="text-xl font-bold">Universal Dark Mode</h1>
+  </div>
+  
+  <div class="mb-4">
+    <label class="flex items-center cursor-pointer">
+      <input type="checkbox" id="darkModeToggle" class="sr-only">
+      <div class="toggle-bg relative w-10 h-6 bg-gray-400 rounded-full">
+        <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+      </div>
+      <span class="ml-3 text-sm font-medium">Enable Dark Mode</span>
+    </label>
+  </div>
+  
+  <div class="mb-4">
+    <label for="colorPicker" class="block text-sm font-medium mb-1">Customize Dark Color:</label>
+    <input type="color" id="colorPicker" class="w-full h-8 rounded">
+  </div>
+  
+  <div class="mt-8 text-center text-xs text-gray-600 dark:text-gray-400">
+    <p>If you find this extension useful, consider donating to my BITCOIN Wallet:</p>
+    <p class="mt-1 break-all">1KuMDDSpj8UfgyBHupVhrwGiWfbdLoMmXJ</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
