@@ -1,25 +1,49 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const darkModeToggle = document.getElementById('darkModeToggle');
+  const lightBtn = document.getElementById('lightBtn');
+  const darkBtn = document.getElementById('darkBtn');
   const colorPicker = document.getElementById('colorPicker');
   const body = document.body;
-  const toggleBg = document.querySelector('.toggle-bg');
-  const dot = document.querySelector('.dot');
+  const modeIcon = document.getElementById('modeIcon');
+
+  function setDarkMode(enabled) {
+    if (enabled) {
+      body.classList.remove('light-mode');
+      body.classList.add('dark-mode');
+      lightBtn.classList.remove('active');
+      darkBtn.classList.add('active');
+      modeIcon.innerHTML = `
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      `;
+    } else {
+      body.classList.remove('dark-mode');
+      body.classList.add('light-mode');
+      lightBtn.classList.add('active');
+      darkBtn.classList.remove('active');
+      modeIcon.innerHTML = `
+        <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 2V4M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M6.31412 17.69L4.8999 19.1042M17.6859 17.69L19.1001 19.1042M22 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      `;
+    }
+  }
 
   // Load saved settings
   chrome.storage.sync.get(['darkModeEnabled', 'darkColor'], function(result) {
-    darkModeToggle.checked = result.darkModeEnabled || false;
+    setDarkMode(result.darkModeEnabled || false);
     colorPicker.value = result.darkColor || '#1a1a1a';
-    updateToggleUI();
-    updateBodyClass();
   });
 
   // Toggle dark mode
-  darkModeToggle.addEventListener('change', function() {
-    const enabled = darkModeToggle.checked;
-    chrome.storage.sync.set({darkModeEnabled: enabled}, function() {
-      updateToggleUI();
-      updateBodyClass();
-      applyDarkMode(enabled);
+  lightBtn.addEventListener('click', function() {
+    chrome.storage.sync.set({darkModeEnabled: false}, function() {
+      setDarkMode(false);
+      applyDarkMode(false);
+    });
+  });
+
+  darkBtn.addEventListener('click', function() {
+    chrome.storage.sync.set({darkModeEnabled: true}, function() {
+      setDarkMode(true);
+      applyDarkMode(true);
     });
   });
 
@@ -27,33 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
   colorPicker.addEventListener('change', function() {
     const color = colorPicker.value;
     chrome.storage.sync.set({darkColor: color}, function() {
-      applyDarkMode(darkModeToggle.checked);
+      applyDarkMode(body.classList.contains('dark-mode'));
     });
   });
-
-  function updateToggleUI() {
-    if (darkModeToggle.checked) {
-      dot.classList.add('translate-x-4');
-      toggleBg.classList.remove('bg-gray-400');
-      toggleBg.classList.add('bg-blue-600');
-      dot.classList.remove('bg-white');
-      dot.classList.add('bg-gray-200');
-    } else {
-      dot.classList.remove('translate-x-4');
-      toggleBg.classList.remove('bg-blue-600');
-      toggleBg.classList.add('bg-gray-400');
-      dot.classList.remove('bg-gray-200');
-      dot.classList.add('bg-white');
-    }
-  }
-
-  function updateBodyClass() {
-    if (darkModeToggle.checked) {
-      body.classList.add('dark');
-    } else {
-      body.classList.remove('dark');
-    }
-  }
 
   function applyDarkMode(enabled) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
