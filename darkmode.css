@@ -1,0 +1,19 @@
+:root {
+    --dark-mode-bg: #1a1a1a;
+  }
+  
+  .universal-dark-mode {
+    background-color: var(--dark-mode-bg) !important;
+    color: #f0f0f0 !important;
+  }
+  
+  .universal-dark-mode * {
+    background-color: var(--dark-mode-bg) !important;
+    color: #f0f0f0 !important;
+    border-color: #444 !important;
+  }
+  
+  .universal-dark-mode img,
+  .universal-dark-mode video {
+    filter: brightness(0.8) contrast(1.2);
+  }
